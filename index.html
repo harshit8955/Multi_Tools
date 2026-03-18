@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Toolbox — All Web Tools in One Place</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Apply theme immediately to avoid flash
+    (function(){
+      var t = localStorage.getItem('toolbox_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 </head>
 <body>
 
@@ -16,15 +23,18 @@
     </a>
     <div class="nav-links">
       <a href="#tools" class="nav-link active">Tools</a>
-      <a href="auth.html" class="nav-link">Categories</a>
+      <a href="#categories" class="nav-link">Categories</a>
       <a href="admin.html" class="nav-link">Admin</a>
     </div>
     <div class="nav-actions">
       <button class="theme-toggle" title="Toggle theme">🌙</button>
-      <a href="admin.html" class="btn-admin">⚙️ Admin Panel</a>
-    </div>
-    <!-- Logged-in user menu -->
-      <div id="userNav" style="display:none;align-items:center;gap:10px;position:relative">
+      <!-- Guest buttons -->
+      <div id="guestNav" class="nav-guest">
+        <a href="auth.html" class="btn-admin btn-signin">Sign In</a>
+        <a href="auth.html" class="btn-admin">Get Started →</a>
+      </div>
+      <!-- Logged-in user menu -->
+      <div id="userNav" class="nav-user">
         <div class="user-avatar" id="userAvatar" onclick="toggleUserMenu()" title="Account menu"></div>
         <div class="user-menu" id="userMenu">
           <div class="user-menu-header">
@@ -33,7 +43,7 @@
           </div>
           <a href="index.html" class="user-menu-item">🧰 My Tools</a>
           <a href="admin.html" class="user-menu-item">⚙️ Admin Panel</a>
-          <a href="auth.html" class="user-menu-item" onclick="logout();return false">🚪 Sign Out</a>
+          <a href="#" class="user-menu-item" onclick="logout();return false">🚪 Sign Out</a>
         </div>
       </div>
     </div>
@@ -130,7 +140,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Toolbox. All rights reserved. Made with ❤️ by Harshit Sharma</p>
+      <p>© 2024 Toolbox. All rights reserved. Made with ❤️</p>
       <div class="footer-links">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Use</a>
@@ -150,15 +160,15 @@
       const guestNav = document.getElementById('guestNav');
       const userNav = document.getElementById('userNav');
       if (sess && sess.loggedIn) {
-        guestNav.style.display = 'none';
-        userNav.style.display = 'flex';
+        guestNav.classList.add('nav-hidden');
+        userNav.classList.add('nav-visible');
         const initials = sess.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
         document.getElementById('userAvatar').textContent = initials;
         document.getElementById('userMenuName').textContent = sess.name;
         document.getElementById('userMenuEmail').textContent = sess.email;
       } else {
-        guestNav.style.display = 'flex';
-        userNav.style.display = 'none';
+        guestNav.classList.remove('nav-hidden');
+        userNav.classList.remove('nav-visible');
       }
     }
     function toggleUserMenu() {
