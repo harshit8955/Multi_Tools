@@ -804,3 +804,28 @@ img.preview { max-width: 100%; border-radius: 12px; margin-top: 0.75rem; }
 .user-menu-item:hover { background: var(--surface2); color: var(--accent); }
 .user-menu-item:last-child { border-top: 1px solid var(--border); color: var(--red); }
 .user-menu-item:last-child:hover { background: rgba(239,68,68,0.06); color: var(--red); }
+
+/* ===== NAV AUTH VISIBILITY ===== */
+.nav-guest {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.btn-signin {
+  background: var(--surface) !important;
+  color: var(--accent) !important;
+  border: 1.5px solid var(--border2) !important;
+  box-shadow: none !important;
+}
+.nav-user {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+.nav-guest.nav-hidden {
+  display: none !important;
+}
+.nav-user.nav-visible {
+  display: flex !important;
+}
