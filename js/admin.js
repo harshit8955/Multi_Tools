@@ -281,6 +281,7 @@ function renderToolsManager(el) {
 function renderSettings(el) {
   const siteName = localStorage.getItem('toolbox_sitename') || 'Toolbox';
   const siteTagline = localStorage.getItem('toolbox_tagline') || 'All your web tools in one place';
+  const adminUser = typeof window.getCurrentAdminUsername === 'function' ? window.getCurrentAdminUsername() : 'admin';
 
   el.innerHTML = `
     <div class="page-header">
@@ -309,16 +310,21 @@ function renderSettings(el) {
       </div>
 
       <div class="table-card" style="padding:1.5rem">
-        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:1.5rem">🔐 Admin Access</h3>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:1.5rem">🔐 Admin Credentials</h3>
         <div class="form-group">
-          <label>Admin Password (set to protect panel)</label>
+          <label>Current Username</label>
+          <input type="text" id="s-user" placeholder="New username" style="margin-bottom:0.75rem" value="${adminUser}">
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
           <input type="password" id="s-pass" placeholder="Enter new password">
         </div>
         <div class="form-group">
-          <label>Confirm Password</label>
+          <label>Confirm New Password</label>
           <input type="password" id="s-pass2" placeholder="Confirm password">
         </div>
-        <button class="btn btn-primary" onclick="savePassword()">🔒 Update Password</button>
+        <p style="font-size:0.78rem;color:var(--text3);margin-bottom:1rem;line-height:1.5">⚠️ Default login is <strong>admin</strong> / <strong>admin123</strong>. Change this immediately for security.</p>
+        <button class="btn btn-primary" onclick="savePassword()">🔒 Update Credentials</button>
       </div>
 
       <div class="table-card" style="padding:1.5rem">
@@ -387,12 +393,21 @@ function saveSiteSettings() {
 }
 
 function savePassword() {
+  const username = (document.getElementById('s-user').value || '').trim();
   const p1 = document.getElementById('s-pass').value;
   const p2 = document.getElementById('s-pass2').value;
-  if (!p1) { toast('Enter a password', 'error'); return; }
+  if (!username) { toast('Enter a username', 'error'); return; }
+  if (!p1) { toast('Enter a new password', 'error'); return; }
+  if (p1.length < 6) { toast('Password must be at least 6 characters', 'error'); return; }
   if (p1 !== p2) { toast('Passwords do not match', 'error'); return; }
-  localStorage.setItem('toolbox_admin_pass', btoa(p1));
-  toast('Password updated!', 'success');
+  if (typeof window.changeAdminPassword === 'function') {
+    window.changeAdminPassword(username, p1);
+    toast('Credentials updated! New login: ' + username, 'success');
+    document.getElementById('s-pass').value = '';
+    document.getElementById('s-pass2').value = '';
+  } else {
+    toast('Password updated!', 'success');
+  }
 }
 
 function exportConfig() {
