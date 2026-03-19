@@ -297,3 +297,241 @@ tr:hover td { background: var(--card-hover, rgba(124,58,237,0.02)); }
   .sidebar.open { transform: translateX(0); }
   .admin-main { margin-left: 0; }
 }
+
+/* ===== ADMIN LOGIN GATE ===== */
+#adminGate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  transition: opacity 0.4s ease;
+}
+#adminGate.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.gate-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 24px;
+  padding: 2.5rem 2.25rem;
+  box-shadow: var(--shadow2);
+  animation: gateIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes gateIn {
+  from { opacity: 0; transform: translateY(32px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+.gate-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+.gate-logo .icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+  animation: logoFloat 4s ease-in-out infinite;
+}
+@keyframes logoFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+.gate-logo-text h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.gate-logo-text span {
+  font-size: 0.78rem;
+  color: var(--text3);
+}
+.gate-heading {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+}
+.gate-sub {
+  font-size: 0.88rem;
+  color: var(--text2);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.gate-field {
+  margin-bottom: 1.1rem;
+}
+.gate-field label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+.gate-input-wrap {
+  position: relative;
+}
+.gate-input-wrap input {
+  width: 100%;
+  padding: 12px 46px 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border2);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  outline: none;
+  transition: var(--transition);
+}
+.gate-input-wrap input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(124,58,237,0.12);
+}
+.gate-input-wrap input.shake {
+  animation: shake 0.4s ease;
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px rgba(239,68,68,0.12);
+}
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+.toggle-pass-btn {
+  position: absolute;
+  right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  cursor: pointer; font-size: 1rem;
+  color: var(--text3); padding: 4px;
+  transition: var(--transition);
+}
+.toggle-pass-btn:hover { color: var(--accent); }
+.gate-error {
+  font-size: 0.8rem;
+  color: var(--red);
+  margin-top: 5px;
+  min-height: 1.1em;
+  display: none;
+}
+.gate-error.show { display: block; }
+.gate-attempts {
+  font-size: 0.78rem;
+  color: var(--amber);
+  margin-top: 0.4rem;
+  text-align: center;
+  min-height: 1.1em;
+}
+.gate-btn {
+  width: 100%;
+  padding: 13px;
+  margin-top: 0.5rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 14px rgba(124,58,237,0.3);
+  letter-spacing: 0.02em;
+}
+.gate-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124,58,237,0.45); }
+.gate-btn:active:not(:disabled) { transform: scale(0.98); }
+.gate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.gate-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text3);
+}
+.gate-footer a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.gate-footer a:hover { text-decoration: underline; }
+.gate-lockout {
+  text-align: center;
+  padding: 1rem 0;
+}
+.gate-lockout .lock-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  display: block;
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+.gate-lockout h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+.gate-lockout p { font-size: 0.88rem; color: var(--text2); line-height: 1.6; }
+.gate-countdown {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--red);
+  margin: 1rem 0;
+}
+.gate-theme-btn {
+  position: fixed;
+  top: 1.25rem; right: 1.25rem;
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  z-index: 10000;
+}
+.gate-theme-btn:hover { transform: rotate(20deg); }
+
+/* Logged-in topbar info */
+.admin-session-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text2);
+}
+.admin-session-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+}
+.admin-logout-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text2);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.admin-logout-btn:hover { background: rgba(239,68,68,0.08); color: var(--red); border-color: rgba(239,68,68,0.3); }
